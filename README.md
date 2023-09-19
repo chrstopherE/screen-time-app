@@ -1,4 +1,4 @@
-# screen-time-app
+# Screen Time Monitoring Application
 Initial web version of the proposed screen time monitoring desktop application
 
 ## Installation
