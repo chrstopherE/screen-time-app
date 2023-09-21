@@ -16,7 +16,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 const userRoutes = require('./routes/user');
 
-//const MongoDBStore = require("connect-mongo")(session);
+const MongoDBStore = require('connect-mongo');
 
 const { isLoggedIn } = require('./middleware'); //add to home route later
 
@@ -30,16 +30,16 @@ app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// const dbUrl = process.env.DB_URL
+const dbUrl = process.env.DB_URL
 // connect to mongoDB
-const uri = 'mongodb+srv://stmsadmin:stmsadmin@stmsdb.zdhsc63.mongodb.net/stmsDB?retryWrites=true&w=majority';
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+//const uri = 'mongodb+srv://stmsadmin:stmsadmin@stmsdb.zdhsc63.mongodb.net/stmsDB?retryWrites=true&w=majority';
+mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 // logic to check if database is connected
 .then((result) => console.log('Connected to Database'))
 .catch((err) => console.log(err))
 
 // setup public directory for other stuff
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')));
 
 // middleware for parsing req.body
 app.use(express.urlencoded({ extended: true }));
@@ -48,19 +48,19 @@ app.use(express.json());
 // prevents SQL and non-SQL injections for security purposes.
 app.use(mongoSanitize());
 
-// const store = new MongoDBStore({
-//   url: uri,
-//   secret: 'this is a secret',
-//   touchAfter: 24 * 60 * 60 // 24 hours
-// });
+const store = new MongoDBStore({
+  mongoUrl: dbUrl,
+  secret: 'this is a secret',
+  touchAfter: 24 * 60 * 60 // 24 hours
+});
 
-// store.on("error", function (e) {
-//   console.log("SESSION STORE ERROR", e)
-// })
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR", e)
+})
 
 // handles session request for the app if needed??
 const sessionConfig = {
-  //store,
+  store,
   name: 'session',
   secret: 'this is a secret',
   resave: false,
@@ -105,7 +105,7 @@ app.get('/', (req, res) => {
 })
 
 // setup route
-app.get('/home', (req, res) => {
+app.get('/home', isLoggedIn, (req, res) => {
   res.render('home');
 })
 
