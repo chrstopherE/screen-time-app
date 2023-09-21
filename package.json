@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "app.js",
+    "start": "node app.js",
     "rerun": "nodemon app.js"
   },
   "keywords": [],
@@ -24,7 +24,7 @@
     "joi": "^17.10.1",
     "mjs": "^1.0.0",
     "mongodb": "5.8.0",
-    "mongoose": "^7.5.0",
+    "mongoose": "^7.5.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0"
