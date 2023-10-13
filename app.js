@@ -91,17 +91,15 @@ app.use((req, res, next) => {
   next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-  const user = new User({email: 'espeachristopher@gmail.com', username: 'toph'});
-  const newUser = await User.register(user, 'toph12345');
-  res.send(newUser);
-})
-
 app.use('/', userRoutes);
 
 // setup route
 app.get('/', (req, res) => {
   res.render('landing');
+})
+
+app.get('/calibration', (req, res) => {
+  res.render('calibration');
 })
 
 // setup route
@@ -113,6 +111,7 @@ app.get('/home', isLoggedIn, (req, res) => {
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page Not Found', 404));
 })
+
 app.use((err, req, res, next) => {
   const { statusCode = 500} = err;
   if(!err.message) err.message = "Something Went Wrong";
