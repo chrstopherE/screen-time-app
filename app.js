@@ -32,7 +32,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 const dbUrl = process.env.DB_URL
 // connect to mongoDB
-//const uri = 'mongodb+srv://stmsadmin:stmsadmin@stmsdb.zdhsc63.mongodb.net/stmsDB?retryWrites=true&w=majority';
 mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 // logic to check if database is connected
 .then((result) => console.log('Connected to Database'))
